@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root,
+html,
+body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.cl-signUp-root .cl-footer {
+  display: none;
+}
+
+.cl-signIn-root .cl-footer {
+  display: none;
+}
+
+.ant-upload-btn:has(#file-uploader-custom-id) {
+  height: 25vh;
+}
