@@ -37,3 +37,11 @@ body {
 .ant-upload-btn:has(#file-uploader-custom-id) {
   height: 25vh;
 }
+
+.cl-userButtonPopoverRootBox .cl-userButtonPopoverFooter {
+  display: none;
+}
+
+.cl-userProfile-root .cl-navbar:last-child {
+  display: none;
+}
