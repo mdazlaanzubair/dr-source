@@ -13,7 +13,7 @@ const HomePage = () => {
         </p>
         <Link
           to="/app/chat"
-          className="bg-gradient-to-tr from-accent/80 via-accent to-accent/80 hover:opacity-90 py-4 px-9 whitespace-nowrap rounded-lg transition-colors ease-in-out duration-300"
+          className="bg-gradient-to-tr from-accent/80 via-accent to-accent/80 hover:opacity-90 py-4 px-9 whitespace-nowrap rounded-lg transition-colors ease-in-out duration-500"
         >
           Get Started
         </Link>

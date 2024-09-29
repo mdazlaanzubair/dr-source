@@ -123,13 +123,13 @@ const FileUploadFormModal = ({ visible, closeHandler }) => {
       header={<></>}
       styles={{
         content: {
-          backgroundColor: "#111827",
-          color: "#F3F4F6",
+          backgroundColor: "#ffffff",
+          color: "#252525",
         },
       }}
     >
       {isLoading && (
-        <div className="absolute z-10 inset-0 bg-primary rounded-md flex items-center justify-center">
+        <div className="absolute z-10 inset-0 bg-surface rounded-md flex items-center justify-center">
           <FileUploadSteps currentStep={stage} />
         </div>
       )}
@@ -140,13 +140,21 @@ const FileUploadFormModal = ({ visible, closeHandler }) => {
         layout="vertical"
         className="bg-surface "
       >
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-primary font-bold text-base">
+              Upload your document
+            </h1>
+            <p className="text-secondary text-xs">
+              Kindly upload traceable and trackable pdf files.
+            </p>
+          </div>
           <button
             className="
             w-fit h-fit border rounded 
             text-secondary/50 border-transparent bg-secondary/5
             hover:text-secondary hover:border-secondary/20 hover:bg-secondary/20
-            transition-all ease-in-out duration-300
+            transition-all ease-in-out duration-500
             "
             onClick={handleCloseModal}
             disabled={isLoading}
@@ -154,21 +162,6 @@ const FileUploadFormModal = ({ visible, closeHandler }) => {
             <IoCloseOutline className="m-1 text-xl" />
           </button>
         </div>
-
-        {fileUploadFormRef.getFieldValue("fileName") && (
-          <p className="text-right text-gray-400">
-            <sup>
-              {user?.username}/
-              <span className="text-primary">
-                {fileUploadFormRef
-                  .getFieldValue("fileName")
-                  ?.replace(/ /g, "-")
-                  ?.toLowerCase()}
-                .pdf
-              </span>
-            </sup>
-          </p>
-        )}
 
         <Form.Item
           name="uploader"
@@ -188,16 +181,9 @@ const FileUploadFormModal = ({ visible, closeHandler }) => {
             disabled={isLoading}
           >
             <div className="flex flex-col items-center justify-center text-primary">
-              <MdOutlineUploadFile className="text-4xl" />
-              <p className="font-bold mb-3">
+              <MdOutlineUploadFile className="text-4xl mb-3" />
+              <p className="font-bold">
                 Click or drag file to this area to upload
-              </p>
-              <p className="text-red-600 text-xs">
-                Strictly prohibited to upload files other than
-                <code className="bg-red-600/20 text-red-600 border border-red-600 py-px px-1 rounded mx-1 font-bold">
-                  .pdf
-                </code>
-                format.
               </p>
             </div>
           </Dragger>

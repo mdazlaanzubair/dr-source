@@ -30,8 +30,8 @@ export const appRoutes = createBrowserRouter([
           forceRedirectUrl="/app"
           appearance={{
             variables: {
-              colorSurface: "#9CA3AF", // Surface or container background
-              colorAccent: "#0BA5E9", // Accent color (buttons, links, etc.)
+              colorSurface: "#6b7280b3", // Surface or container background
+              colorAccent: "#01adef", // Accent color (buttons, links, etc.)
             },
           }}
         />
@@ -46,8 +46,8 @@ export const appRoutes = createBrowserRouter([
           forceRedirectUrl="/app"
           appearance={{
             variables: {
-              colorSurface: "#9CA3AF", // Surface or container background
-              colorAccent: "#0BA5E9", // Accent color (buttons, links, etc.)
+              colorSurface: "#6b7280b3", // Surface or container background
+              colorAccent: "#01adef", // Accent color (buttons, links, etc.)
             },
           }}
         />
