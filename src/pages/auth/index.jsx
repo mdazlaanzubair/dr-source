@@ -33,7 +33,7 @@ const AuthPage = ({ children }) => {
   }
 
   return (
-    <div className="relative w-screen h-screen flex flex-col justify-center items-center bg-gradient-to-br from-slate-900 via-background to-slate-900">
+    <div className="relative w-screen h-screen flex flex-col justify-center items-center bg-gradient-to-br from-slate-200 via-background to-slate-900">
       {children}
       <hr />
       {pathname == "/login" ? (
