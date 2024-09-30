@@ -118,7 +118,7 @@ export const getAnswer = (body, onSuccess, onFailure) => async (dispatch) => {
           file_id,
           user_id,
           answer: ai_response
-            ? ai_response
+            ? `${ai_response}`
             : "Nothing found relevant with the query in the selected document.",
           context: context_document,
         })

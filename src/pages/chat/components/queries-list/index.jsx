@@ -2,6 +2,7 @@ import { Button, Typography } from "antd";
 import React, { useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ContextModal } from "./components";
+import Markdown from "react-markdown";
 
 const QueriesList = () => {
   const { queries, selectedFile } = useSelector((state) => state.chat);
@@ -17,7 +18,7 @@ const QueriesList = () => {
   return (
     <div
       className={`group
-        my-5 relative w-full overflow-y-auto lg:w-1/2 
+        py-5 relative w-full overflow-y-auto lg:w-1/2 
         flex flex-col items-center justify-center gap-3
         z-10 backdrop-blur-md bg-opacity-90
         ${true ? "h-auto opacity-100" : "h-0 opacity-0"}
@@ -34,19 +35,26 @@ const QueriesList = () => {
             transition-all ease-in-out duration-500
             "
         >
-          <Typography.Paragraph className="text-base font-bold w-full capitalize">
+          <Typography.Paragraph
+            ellipsis={{
+              rows: 2,
+              expandable: "collapsible",
+              symbol: <small className="text-xs">Expand</small>,
+            }}
+            className="text-xs font-bold w-full capitalize"
+          >
             {`${query?.question}?`}
           </Typography.Paragraph>
           <Typography.Paragraph
             ellipsis={{
-              rows: 4,
+              rows: 9,
               expandable: "collapsible",
-              symbol: "Read more",
+              symbol: "View answer",
             }}
             className="text-xs font-light w-full"
             copyable
           >
-            {query?.answer}
+            <Markdown>{query?.answer}</Markdown>
           </Typography.Paragraph>
           <Button
             type="primary"
