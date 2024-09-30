@@ -29,9 +29,9 @@ const QueriesList = () => {
         <div
           key={query?.id}
           className="
-            group-hover:blur-sm
+            group-hover:opacity-50
             w-full h-fit p-5 rounded-lg shadow-primary/10
-            hover:!blur-0 hover:bg-surface hover:shadow-md
+            hover:!opacity-100 hover:bg-surface hover:shadow-md
             transition-all ease-in-out duration-500
             "
         >
