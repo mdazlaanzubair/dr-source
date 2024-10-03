@@ -4,27 +4,20 @@ import { MdOutlineUploadFile } from "react-icons/md";
 import { useUser } from "@clerk/clerk-react";
 import { useDispatch } from "react-redux";
 import { notify } from "../../../../utils/notify";
-import { pdfReader } from "../../../../utils/pdfReader";
 import {
   generatingVectors,
   saveFileRecord,
 } from "../../../../redux/chat/actions";
-import FileUploadSteps from "../file-upload-steps";
+import FileUploadSteps from "../file-upload-loader";
 import { IoCloseOutline } from "react-icons/io5";
+import FileUploadLoader from "../file-upload-loader";
 
 const { Dragger } = Upload;
-
-const stages = {
-  STAGE_1: "process-stage",
-  STAGE_2: "embed-stage",
-  STAGE_3: "final-stage",
-};
 
 const FileUploadFormModal = ({ visible, closeHandler }) => {
   const dispatch = useDispatch();
   const [fileUploadFormRef] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
-  const [stage, setStage] = useState(null);
   const failureCallback = () => {
     setTimeout(() => setIsLoading(false), 3000);
   };
@@ -45,15 +38,23 @@ const FileUploadFormModal = ({ visible, closeHandler }) => {
 
   const handleFileSubmit = async ({ uploader }) => {
     setIsLoading(true);
+
+    const formData = new FormData();
     const fileName = uploader?.fileList[0]?.originFileObj?.name;
     const slug = fileName?.replace(/ /g, "-")?.toLowerCase();
+    const file = uploader?.fileList[0]?.originFileObj;
+
+    formData.append("file", file); // Access the file from the Upload component
+    formData.append("fileName", fileName); // Add file name to form data
+    formData.append("slug", slug);
+    formData.append("name_space", `${user?.id}-${slug}`);
 
     try {
-      const file = uploader?.fileList[0]?.originFileObj;
-      const pdf_document = await pdfReader(file, failureCallback);
-      setStage(stages.STAGE_1);
+      const successCallback = (title, slug) => {
+        finalizeUpload(title, slug);
+      };
 
-      await processFileUpload(pdf_document, slug, fileName);
+      await generatingVectors(formData, successCallback, failureCallback);
     } catch ({ error, message }) {
       console.error(error, message);
       notify("error", `Oops! ${error} Error`, `${message}`);
@@ -61,25 +62,11 @@ const FileUploadFormModal = ({ visible, closeHandler }) => {
     }
   };
 
-  // MAKING API CALL TO GENERATE VECTORS
-  const processFileUpload = async (pdf_document, slug, title) => {
-    const successCallback = () => {
-      setStage(stages.STAGE_2);
-      finalizeUpload(title, slug);
-    };
-    await generatingVectors(
-      { pdf_document, name_space: `${user?.id}-${slug}` },
-      successCallback,
-      failureCallback
-    );
-  };
-
   // MAKING SUPABASE REQ TO SAVE FILE RECORD
   const finalizeUpload = (title, slug) => {
     const req_body = { title, slug, user_id: user?.id };
 
     const successCallback = () => {
-      setStage(stages.STAGE_3);
       setIsLoading(false);
       handleCloseModal();
       notify(
@@ -87,7 +74,6 @@ const FileUploadFormModal = ({ visible, closeHandler }) => {
         "File Uploaded",
         "PDF processed and embeddings stored in Pinecone"
       );
-      setTimeout(() => setStage(null), 3000);
     };
     dispatch(saveFileRecord(req_body, successCallback, failureCallback));
   };
@@ -130,7 +116,7 @@ const FileUploadFormModal = ({ visible, closeHandler }) => {
     >
       {isLoading && (
         <div className="absolute z-10 inset-0 bg-surface rounded-md flex items-center justify-center">
-          <FileUploadSteps currentStep={stage} />
+          <FileUploadLoader />
         </div>
       )}
 

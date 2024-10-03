@@ -1,5 +1,5 @@
 import FileUploadFormModal from "./file-upload-form-modal";
-import FileUploadSteps from "./file-upload-steps";
+import FileUploadLoader from "./file-upload-loader";
 import FilesList from "./files-list";
 import QueriesList from "./queries-list";
 import QueryForm from "./query-form";
@@ -7,7 +7,7 @@ import QueryForm from "./query-form";
 export {
   FilesList,
   FileUploadFormModal,
-  FileUploadSteps,
+  FileUploadLoader,
   QueriesList,
   QueryForm,
 };

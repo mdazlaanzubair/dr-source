@@ -7,6 +7,7 @@ import { notify } from "../../utils/notify";
 import supabase from "../../supabase";
 import axios from "axios";
 import { appEnv } from "../../utils/exportEnv";
+import { pagesMerger } from "../../utils/pagesMerger";
 
 // BASE URL FOR BACKEND API
 const base_url = appEnv.llm_api_url;
@@ -83,12 +84,18 @@ export const deleteFile = (file_id, callback) => async (dispatch) => {
 };
 
 // MAKING API CALL TO GENERATE VECTOR EMBEDDINGS OF THE UPLOADED PDF DOCUMENT
-export const generatingVectors = async (body, onSuccess, onFailure) => {
+export const generatingVectors = async (formData, onSuccess, onFailure) => {
   try {
     // MAKING API CALL TO CONVERT PDF TEXT INTO VECTORS CONTEXT
-    await axios.post(`${base_url}/text-to-vec`, body);
+    const res = await axios.post(`${base_url}/upload`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-    onSuccess && onSuccess();
+    const { title, slug } = res.data;
+
+    onSuccess && onSuccess(title, slug);
   } catch ({ error, message }) {
     onFailure && onFailure("failed");
     console.error(error, message);
@@ -106,10 +113,11 @@ export const getAnswer = (body, onSuccess, onFailure) => async (dispatch) => {
       question,
       name_space,
     });
-
-    const { success, context_document, ai_response } = res.data;
+    const { success, context_source, ai_response } = res.data;
 
     if (success) {
+      const context = pagesMerger(context_source);
+
       // SAVING QUERIES DATA TO THE TABLE
       const { data, error } = await supabase
         .from("queries")
@@ -117,10 +125,10 @@ export const getAnswer = (body, onSuccess, onFailure) => async (dispatch) => {
           question,
           file_id,
           user_id,
+          context,
           answer: ai_response
             ? `${ai_response}`
             : "Nothing found relevant with the query in the selected document.",
-          context: context_document,
         })
         .select();
 
