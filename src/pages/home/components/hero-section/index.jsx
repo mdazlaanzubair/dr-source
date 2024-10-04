@@ -2,6 +2,7 @@ import { Button } from "antd";
 import React from "react";
 import { MdArrowRightAlt } from "react-icons/md";
 import heroImage from "../../../../assets/hero-img.jpg";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -18,9 +19,9 @@ const HeroSection = () => {
           interact with long-form content.
         </p>
         <div className="flex items-center justify-start">
-          <div to="/app/chat" className="button-container">
+          <Link to="/app/chat" className="button-container">
             <div className="animated-button">Get started</div>
-          </div>
+          </Link>
           <Button
             href="#about-section"
             className="group flex items-center justify-center gap-3 w-auto"
