@@ -29,6 +29,7 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   background-color: #f8f8f8;
+  scroll-behavior: smooth;
 }
 
 .cl-signUp-root .cl-footer {
@@ -53,12 +54,136 @@ body {
 
 /* Selected option in the dropdown menu */
 .ant-select-item-option-selected {
-  background-color: #8c14ff !important; /* Customize selected option background */
-  color: #fff !important;               /* Customize selected option text color */
+  background-color: #4F45E4 !important; /* Customize selected option background */
+  color: #fff !important; /* Customize selected option text color */
 }
 
 /* Customize hover effect in the dropdown */
 .ant-select-item-option-active {
-  background-color: #8c14ff !important; /* Customize hover background */
-  color: #fff !important;               /* Customize hover text color */
+  background-color: #4F45E4 !important; /* Customize hover background */
+  color: #fff !important; /* Customize hover text color */
+}
+
+.button-container {
+  position: relative;
+  font-weight: 600;
+  width: 12rem;
+  height: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  box-shadow: 0px 0px 5px #cbcbcb;
+  transition: all ease-in-out 0.2s;
+}
+
+.button-container::before {
+  content: "";
+  width: 100%;
+  aspect-ratio: 1/1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50% -50%);
+  background: conic-gradient(transparent 270deg, #4F45E4, #4F45E400);
+  animation: rotate 2s linear infinite;
+}
+
+.button-container .animated-button {
+  text-align: center;
+  align-content: center;
+  position: relative;
+  color: #4F45E4;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+.button-container:hover {
+  width: 11.5rem;
+  height: 3rem;
+  box-shadow: 0px 0px 20px #cbcbcb;
+}
+
+.button-container:hover .button-container::before {
+  animation-duration: 5s;
+}
+
+@keyframes rotate {
+  0% {
+    transform: translate(-50%, -50%) scale(1.4) rotate(0turn);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.4) rotate(1turn);
+  }
+}
+
+.button-container {
+  position: relative;
+  font-weight: 600;
+  width: 12rem;
+  height: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  box-shadow: 0px 0px 5px #cbcbcb;
+  transition: all ease-in-out 0.2s;
+}
+
+.button-container::before {
+  content: "";
+  width: 100%;
+  aspect-ratio: 1/1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50% -50%);
+  background: conic-gradient(transparent 270deg, #4F45E4, #4F45E400);
+  animation: rotate 2s linear infinite;
+}
+
+.button-container .animated-button {
+  text-align: center;
+  align-content: center;
+  position: relative;
+  color: #4F45E4;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+.button-container:hover {
+  width: 11.5rem;
+  height: 3rem;
+  box-shadow: 0px 0px 20px #cbcbcb;
+}
+
+.button-container:hover .button-container::before {
+  animation-duration: 5s;
+}
+
+@keyframes rotate {
+  0% {
+    transform: translate(-50%, -50%) scale(1.4) rotate(0turn);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.4) rotate(1turn);
+  }
 }

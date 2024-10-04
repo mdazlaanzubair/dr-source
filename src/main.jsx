@@ -11,14 +11,14 @@ import { store } from "./redux/index.js";
 
 const theme = {
   token: {
-    colorPrimary: "#8c14ff", // Accent color (Tailwind's accent)
+    colorPrimary: "#4F45E4", // Accent color (Tailwind's accent)
     colorBgBase: "#f8f8f8", // Background color (Tailwind's background)
     colorTextBase: "#212121", // Primary text color (Tailwind's primary)
     colorTextSecondary: "#555555", // Secondary text color
     colorBgContainer: "#ffffff", // Surface color (Tailwind's surface)
-    colorLink: "#8c14ff", // Link color (Tailwind's accent)
+    colorLink: "#4F45E4", // Link color (Tailwind's accent)
     controlItemBgHover: "#ffffff", // Hover for buttons and inputs (same surface color)
-    controlItemBgActive: "#8c14ff", // Active button color
+    controlItemBgActive: "#4F45E4", // Active button color
   },
 };
 
