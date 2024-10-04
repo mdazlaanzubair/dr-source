@@ -14,6 +14,9 @@ const base_url = appEnv.llm_api_url;
 
 // REDUX ACTION TO GET ALL USER FILES FROM SUPABASE
 export const getFilesRecord = (userId, onFailure) => async (dispatch) => {
+  // TOGGLING QUERIES LOADER
+  dispatch(actions.toggleFilesLoading(true));
+
   try {
     // GETTING DATA FROM THE TABLE
     const { data, error } = await supabase
@@ -27,6 +30,9 @@ export const getFilesRecord = (userId, onFailure) => async (dispatch) => {
     // UPDATING REDUX STATE
     dispatch(actions.setFiles(data));
     dispatch(actions.selectFile(data[0]));
+
+    // TOGGLING QUERIES LOADER
+    dispatch(actions.toggleFilesLoading(false));
 
     return;
   } catch ({ error, message }) {
@@ -149,6 +155,9 @@ export const getAnswer = (body, onSuccess, onFailure) => async (dispatch) => {
 
 // REDUX ACTION TO GET ALL USER QUERIES FROM SUPABASE
 export const getQueriesRecord = (userId, onFailure) => async (dispatch) => {
+  // TOGGLING QUERIES LOADER
+  dispatch(actions.toggleQueriesLoading(true));
+
   try {
     // GETTING DATA FROM THE TABLE
     const { data, error } = await supabase
@@ -162,9 +171,34 @@ export const getQueriesRecord = (userId, onFailure) => async (dispatch) => {
     // UPDATING REDUX STATE
     dispatch(actions.setQueries(data));
 
+    // TOGGLING QUERIES LOADER
+    dispatch(actions.toggleQueriesLoading(false));
+
     return;
   } catch ({ error, message }) {
     onFailure && onFailure();
+    console.error(error, message);
+    notify("error", `Oops! ${error} Error`, `${message}`);
+  }
+};
+
+// REDUX ACTION TO DELETE THE QUERIES DATA FROM SUPABASE
+export const deleteQuery = (query_id, callback) => async (dispatch) => {
+  try {
+    // ELSE SAVE UPLOADED RESUME DATA TO SUPABASE
+    // SAVING RESUME DATA TO THE TABLE
+    const { error } = await supabase.from("queries").delete().eq("id", query_id);
+
+    if (error) throw error;
+
+    // UPDATING REDUX STATE
+    dispatch(actions.deleteQuery(query_id));
+
+    notify("success", "Query deleted successfully");
+    callback && callback();
+    return;
+  } catch ({ error, message }) {
+    callback && callback();
     console.error(error, message);
     notify("error", `Oops! ${error} Error`, `${message}`);
   }

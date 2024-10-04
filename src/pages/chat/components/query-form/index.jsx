@@ -51,11 +51,7 @@ const QueryForm = () => {
   };
 
   return (
-    <div
-      className="group relative w-full lg:w-1/2 flex flex-col items-center justify-center mt-5 p-5 md:p-8 pb-0 md:pb-0
-  bg-surface rounded-lg shadow-md shadow-secondary/20 z-10 backdrop-blur-md bg-opacity-90
-  "
-    >
+    <div className="group relative w-full flex flex-col items-center justify-center">
       <div className="relative w-full h-14">
         <textarea
           disabled={isLoading}

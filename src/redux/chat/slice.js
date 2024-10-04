@@ -4,12 +4,18 @@ const initialState = {
   files: [],
   queries: [],
   selectedFile: null,
+  isLoadingQueries: false,
+  isLoadingFiles: false,
 };
 
 const chatSlice = createSlice({
   name: "chat",
   initialState: initialState,
   reducers: {
+    toggleFilesLoading: (state, action) => {
+      state.isLoadingFiles = action.payload;
+    },
+
     setSingleFile: (state, action) => {
       state.files = [action.payload, ...state.files];
     },
@@ -38,12 +44,25 @@ const chatSlice = createSlice({
       state.queries = [...filteredQueries];
     },
 
+    toggleQueriesLoading: (state, action) => {
+      state.isLoadingQueries = action.payload;
+    },
+
     setSingleQuery: (state, action) => {
       state.queries = [action.payload, ...state.queries];
     },
 
     setQueries: (state, action) => {
       state.queries = action.payload;
+    },
+
+    deleteQuery: (state, action) => {
+      // DELETING QUERY
+      const filteredQueries = state.queries?.filter(
+        ({ id: query_id }) => query_id !== action.payload
+      );
+
+      state.queries = [...filteredQueries];
     },
   },
 });

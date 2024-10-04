@@ -12,6 +12,10 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+
+  .bg-accent-gradient {
+    @apply bg-gradient-to-tl from-accent via-accent/80 to-accent/50 text-surface;
+  }
 }
 
 :root,
@@ -24,6 +28,7 @@ body {
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
+  background-color: #f8f8f8;
 }
 
 .cl-signUp-root .cl-footer {
@@ -44,4 +49,16 @@ body {
 
 .cl-userProfile-root .cl-navbar:last-child {
   display: none;
+}
+
+/* Selected option in the dropdown menu */
+.ant-select-item-option-selected {
+  background-color: #8c14ff !important; /* Customize selected option background */
+  color: #fff !important;               /* Customize selected option text color */
+}
+
+/* Customize hover effect in the dropdown */
+.ant-select-item-option-active {
+  background-color: #8c14ff !important; /* Customize hover background */
+  color: #fff !important;               /* Customize hover text color */
 }
