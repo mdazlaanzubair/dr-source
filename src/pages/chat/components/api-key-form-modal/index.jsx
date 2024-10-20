@@ -63,7 +63,7 @@ const APIKeyFormModal = ({ visible, closeHandler }) => {
         layout="vertical"
         className="bg-surface"
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-5">
           <div>
             <h1 className="text-primary font-bold text-base">Gemini APi Key</h1>
             <p className="text-secondary text-xs">
@@ -79,6 +79,30 @@ const APIKeyFormModal = ({ visible, closeHandler }) => {
         >
           <Input.Password size="large" placeholder="Paste Gemini API" />
         </Form.Item>
+
+        <div className="w-full flex flex-col my-5">
+          <h1 className="font-bold mb-3">
+            How to get
+            <a
+              className="text-accent/80 hover:text-accent transition-all ease-in-out duration-300"
+              href="https://aistudio.google.com/app/apikey"
+              target="_blank"
+            >
+              {" Gemini "}
+            </a>
+            API Key:
+          </h1>
+
+              <iframe
+                className="w-full h-[30vh]"
+                src="https://www.youtube.com/embed/Z8F6FvMrN4o?t=80"
+                title="Master the Gemini API: A Node.js tutorial with real examples"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              ></iframe>
+        </div>
 
         <div className="flex items-center justify-end gap-3">
           <Button
