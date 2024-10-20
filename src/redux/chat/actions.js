@@ -90,24 +90,29 @@ export const deleteFile = (file_id, callback) => async (dispatch) => {
 };
 
 // MAKING API CALL TO GENERATE VECTOR EMBEDDINGS OF THE UPLOADED PDF DOCUMENT
-export const generatingVectors = async (formData, onSuccess, onFailure) => {
-  try {
-    // MAKING API CALL TO CONVERT PDF TEXT INTO VECTORS CONTEXT
-    const res = await axios.post(`${base_url}/upload`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+export const generatingVectors =
+  (formData, onSuccess, onFailure) => async (dispatch) => {
+    try {
+      // MAKING API CALL TO CONVERT PDF TEXT INTO VECTORS CONTEXT
+      const res = await axios.post(`${base_url}/upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-    const { title, slug } = res.data;
+      const { fileData } = res.data;
 
-    onSuccess && onSuccess(title, slug);
-  } catch ({ error, message }) {
-    onFailure && onFailure("failed");
-    console.error(error, message);
-    notify("error", `Oops! ${error} Error`, `${message}`);
-  }
-};
+      // UPDATING REDUX STATE
+      dispatch(actions.setSingleFile(fileData));
+      dispatch(actions.selectFile(fileData));
+
+      onSuccess && onSuccess();
+    } catch ({ error, message }) {
+      onFailure && onFailure("failed");
+      console.error(error, message);
+      notify("error", `Oops! ${error} Error`, `${message}`);
+    }
+  };
 
 // MAKING API CALL TO GET ANSWER OF THE QUESTION FROM PDF DOCUMENT
 export const getAnswer = (body, onSuccess, onFailure) => async (dispatch) => {
@@ -187,7 +192,10 @@ export const deleteQuery = (query_id, callback) => async (dispatch) => {
   try {
     // ELSE SAVE UPLOADED RESUME DATA TO SUPABASE
     // SAVING RESUME DATA TO THE TABLE
-    const { error } = await supabase.from("queries").delete().eq("id", query_id);
+    const { error } = await supabase
+      .from("queries")
+      .delete()
+      .eq("id", query_id);
 
     if (error) throw error;
 

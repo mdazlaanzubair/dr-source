@@ -17,7 +17,15 @@ const chatSlice = createSlice({
     },
 
     setSingleFile: (state, action) => {
-      state.files = [action.payload, ...state.files];
+      // CHECKING IF THE FILE ALREADY EXISTS IN THE STATE
+      const filteredFiles = state.files?.filter(
+        ({ id: file_id }) => file_id !== action.payload.id
+      );
+
+      state.files = filteredFiles?.length <= 0 && [
+        action.payload,
+        ...state.files,
+      ];
     },
 
     setFiles: (state, action) => {
@@ -34,13 +42,18 @@ const chatSlice = createSlice({
         ({ id: file_id }) => file_id !== action.payload
       );
 
+      // RESETTING FILES STATE
       state.files = [...filteredFiles];
+
+      // UPDATING THE SELECTED FILE
+      state.selectedFile = filteredFiles?.length ? filteredFiles[0] : null;
 
       // DELETING FILE RELATED QUERIES
       const filteredQueries = state.queries?.filter(
         ({ file_id }) => file_id !== action.payload
       );
 
+      // RESETTING QUERIES OF FILES
       state.queries = [...filteredQueries];
     },
 

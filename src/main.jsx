@@ -26,7 +26,16 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
       <ConfigProvider theme={theme}>
-        <ClerkProvider publishableKey={appEnv.clerk} afterSignOutUrl="/">
+        <ClerkProvider
+          publishableKey={appEnv.clerk}
+          afterSignOutUrl="/"
+          signInUrl="/app"
+          signUpUrl="/app"
+          signInForceRedirectUrl="/app"
+          signUpForceRedirectUrl="/app"
+          signInFallbackRedirectUrl="/app"
+          signUpFallbackRedirectUrl="/app"
+        >
           <RouterProvider router={appRoutes} />
         </ClerkProvider>
       </ConfigProvider>

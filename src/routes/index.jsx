@@ -28,6 +28,9 @@ export const appRoutes = createBrowserRouter([
       <AuthPage>
         <SignIn
           forceRedirectUrl="/app"
+          fallbackRedirectUrl="/app"
+          signUpForceRedirectUrl="/app"
+          signUpFallbackRedirectUrl="/app"
           appearance={{
             variables: {
               colorSurface: "#6b7280b3", // Surface or container background
@@ -44,6 +47,9 @@ export const appRoutes = createBrowserRouter([
       <AuthPage>
         <SignUp
           forceRedirectUrl="/app"
+          fallbackRedirectUrl="/app"
+          signInForceRedirectUrl="/app"
+          signInFallbackRedirectUrl="/app"
           appearance={{
             variables: {
               colorSurface: "#6b7280b3", // Surface or container background

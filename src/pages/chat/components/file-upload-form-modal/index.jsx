@@ -18,9 +18,8 @@ const FileUploadFormModal = ({ visible, closeHandler }) => {
   const dispatch = useDispatch();
   const [fileUploadFormRef] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
-  const failureCallback = () => {
-    setTimeout(() => setIsLoading(false), 3000);
-  };
+  const failureCallback = () => setTimeout(() => setIsLoading(false), 3000);
+
   const [previewFileList, setPreviewFileList] = useState([]);
   const { user } = useUser();
 
@@ -48,34 +47,25 @@ const FileUploadFormModal = ({ visible, closeHandler }) => {
     formData.append("fileName", fileName); // Add file name to form data
     formData.append("slug", slug);
     formData.append("name_space", `${user?.id}-${slug}`);
+    formData.append("user_id", user?.id);
 
     try {
-      const successCallback = (title, slug) => {
-        finalizeUpload(title, slug);
+      const successCallback = () => {
+        setIsLoading(false);
+        handleCloseModal();
+        notify(
+          "success",
+          "File Uploaded",
+          "PDF processed and embeddings stored in Pinecone"
+        );
       };
 
-      await generatingVectors(formData, successCallback, failureCallback);
+      dispatch(generatingVectors(formData, successCallback, failureCallback));
     } catch ({ error, message }) {
       console.error(error, message);
       notify("error", `Oops! ${error} Error`, `${message}`);
       setIsLoading(false);
     }
-  };
-
-  // MAKING SUPABASE REQ TO SAVE FILE RECORD
-  const finalizeUpload = (title, slug) => {
-    const req_body = { title, slug, user_id: user?.id };
-
-    const successCallback = () => {
-      setIsLoading(false);
-      handleCloseModal();
-      notify(
-        "success",
-        "File Uploaded",
-        "PDF processed and embeddings stored in Pinecone"
-      );
-    };
-    dispatch(saveFileRecord(req_body, successCallback, failureCallback));
   };
 
   const validateFileType = (_, values) => {
