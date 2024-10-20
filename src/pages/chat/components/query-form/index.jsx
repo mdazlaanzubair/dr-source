@@ -8,9 +8,9 @@ import { useUser } from "@clerk/clerk-react";
 import { getAnswer } from "../../../../redux/chat/actions";
 import { notify } from "../../../../utils/notify";
 
-const QueryForm = () => {
+const QueryForm = ({ isDisabled }) => {
   const dispatch = useDispatch();
-  const { selectedFile } = useSelector((state) => state.chat);
+  const { selectedFile, api_key } = useSelector((state) => state.chat);
   const { user } = useUser();
 
   const [query, setQuery] = useState("");
@@ -35,7 +35,11 @@ const QueryForm = () => {
       // PREPARING REQ BODY
       const reqBody = {
         question: query,
-        name_space: `${user?.id}-${selectedFile?.slug}`,
+    // remove non-ASCII characters from string
+        name_space: `${user?.id}-${selectedFile?.slug}`?.replace(
+          /[^\x00-\x7F]+/g,
+          ""
+        ),
         user_id: user?.id,
         file_id: selectedFile?.id,
       };
@@ -54,8 +58,8 @@ const QueryForm = () => {
     <div className="group relative w-full flex flex-col items-center justify-center">
       <div className="relative w-full h-14">
         <textarea
-          disabled={isLoading}
-          readOnly={isLoading}
+          disabled={isLoading || isDisabled}
+          readOnly={isLoading || isDisabled}
           onChange={(e) => setQuery(e.target.value)}
           value={query}
           className="block w-full h-14 p-3 pt-[.95rem]
@@ -65,11 +69,15 @@ const QueryForm = () => {
         focus:outline-none outline-none resize-none
         transition-all ease-in-out duration-500"
           type="text"
-          placeholder="What do you want to ask?"
+          placeholder={
+            isDisabled
+              ? "Configure API Key to proceed further."
+              : "What do you want to ask?"
+          }
           rows={3}
         />
         <button
-          disabled={isLoading}
+          disabled={isLoading || isDisabled}
           onClick={handleQuerySubmit}
           className="absolute top-1/2 -translate-y-1/2 right-3
         w-9 h-9 text-sm text-center border

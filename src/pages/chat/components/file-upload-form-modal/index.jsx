@@ -4,11 +4,7 @@ import { MdOutlineUploadFile } from "react-icons/md";
 import { useUser } from "@clerk/clerk-react";
 import { useDispatch } from "react-redux";
 import { notify } from "../../../../utils/notify";
-import {
-  generatingVectors,
-  saveFileRecord,
-} from "../../../../redux/chat/actions";
-import FileUploadSteps from "../file-upload-loader";
+import { generatingVectors } from "../../../../redux/chat/actions";
 import { IoCloseOutline } from "react-icons/io5";
 import FileUploadLoader from "../file-upload-loader";
 
@@ -46,7 +42,12 @@ const FileUploadFormModal = ({ visible, closeHandler }) => {
     formData.append("file", file); // Access the file from the Upload component
     formData.append("fileName", fileName); // Add file name to form data
     formData.append("slug", slug);
-    formData.append("name_space", `${user?.id}-${slug}`);
+
+    // remove non-ASCII characters from string
+    formData.append(
+      "name_space",
+      `${user?.id}-${slug}`?.replace(/[^\x00-\x7F]+/g, "")
+    );
     formData.append("user_id", user?.id);
 
     try {

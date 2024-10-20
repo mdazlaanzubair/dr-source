@@ -5,13 +5,18 @@ import { ContextModal } from "./components";
 import Markdown from "react-markdown";
 import { TbTrashFilled } from "react-icons/tb";
 import { deleteQuery } from "../../../../redux/chat/actions";
+import { FaExclamationCircle } from "react-icons/fa";
 
 const QueriesList = () => {
   const dispatch = useDispatch();
 
-  const { queries, selectedFile, isLoadingQueries } = useSelector(
-    (state) => state.chat
-  );
+  const {
+    queries,
+    selectedFile,
+    isLoadingQueries,
+    fileEmbeddingTime,
+    queryResponseTime,
+  } = useSelector((state) => state.chat);
 
   const [filteredQueries, setFilteredQueries] = useState([]);
   const [showContext, setShowContext] = useState(null);
@@ -104,6 +109,28 @@ const QueriesList = () => {
         />
       )}
 
+      {queryResponseTime > 0 && (
+        <div className="flex w-full items-center text-sm p-3 bg-blue-100 text-blue-600 border border-blue-600 rounded-md gap-2">
+          <FaExclamationCircle />
+          <p>
+            {`Computing time for document retrieval and response generation is ${(
+              queryResponseTime / 1000
+            ).toFixed(1)}s`}
+          </p>
+        </div>
+      )}
+
+      {fileEmbeddingTime > 0 && (
+        <div className="flex w-full items-center text-sm p-3 bg-blue-100 text-blue-600 border border-blue-600 rounded-md gap-2">
+          <FaExclamationCircle />
+          <p>
+            {`Computing time for document vector embedding is ${(
+              fileEmbeddingTime / 1000
+            ).toFixed(1)}s`}
+          </p>
+        </div>
+      )}
+
       {!isLoadingQueries &&
         filteredQueries?.length > 0 &&
         filteredQueries?.map((query) => (
@@ -129,7 +156,7 @@ const QueriesList = () => {
               }
               className="text-xs text-primary font-bold w-full capitalize"
             >
-              {`${query?.question}?`}
+              {`${query?.question}`}
             </Typography.Paragraph>
 
             <Typography.Paragraph

@@ -25,7 +25,7 @@ const theme = {
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-      <ConfigProvider theme={theme}>
+      <ConfigProvider theme={theme} dev >
         <ClerkProvider
           publishableKey={appEnv.clerk}
           afterSignOutUrl="/"

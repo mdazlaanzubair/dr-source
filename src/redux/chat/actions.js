@@ -7,7 +7,6 @@ import { notify } from "../../utils/notify";
 import supabase from "../../supabase";
 import axios from "axios";
 import { appEnv } from "../../utils/exportEnv";
-import { pagesMerger } from "../../utils/pagesMerger";
 
 // BASE URL FOR BACKEND API
 const base_url = appEnv.llm_api_url;
@@ -42,31 +41,6 @@ export const getFilesRecord = (userId, onFailure) => async (dispatch) => {
   }
 };
 
-// REDUX ACTION TO SAVE THE UPLOADED FILE DATA TO SUPABASE
-export const saveFileRecord =
-  (body, successCallback, onFailure) => async (dispatch) => {
-    try {
-      // SAVING DATA TO THE TABLE
-      const { data, error } = await supabase
-        .from("files")
-        .insert(body)
-        .select();
-
-      if (error) throw error;
-
-      // UPDATING REDUX STATE
-      dispatch(actions.setSingleFile(data[0]));
-      dispatch(actions.selectFile(data[0]));
-
-      successCallback && successCallback();
-      return;
-    } catch ({ error, message }) {
-      onFailure && onFailure();
-      console.error(error, message);
-      notify("error", `Oops! ${error} Error`, `${message}`);
-    }
-  };
-
 // REDUX ACTION TO DELETE THE UPLOADED FILE DATA FROM SUPABASE
 export const deleteFile = (file_id, callback) => async (dispatch) => {
   try {
@@ -100,11 +74,17 @@ export const generatingVectors =
         },
       });
 
-      const { fileData } = res.data;
+      const { fileData, total_time_taken } = res.data;
 
       // UPDATING REDUX STATE
       dispatch(actions.setSingleFile(fileData));
       dispatch(actions.selectFile(fileData));
+      dispatch(
+        actions.setTime({
+          type: "file",
+          time: total_time_taken,
+        })
+      );
 
       onSuccess && onSuccess();
     } catch ({ error, message }) {
@@ -123,34 +103,20 @@ export const getAnswer = (body, onSuccess, onFailure) => async (dispatch) => {
     const res = await axios.post(`${base_url}/query`, {
       question,
       name_space,
+      file_id,
+      user_id,
     });
-    const { success, context_source, ai_response } = res.data;
+    const { queryData, total_time_taken } = res.data;
 
-    if (success) {
-      const context = pagesMerger(context_source);
-
-      // SAVING QUERIES DATA TO THE TABLE
-      const { data, error } = await supabase
-        .from("queries")
-        .upsert({
-          question,
-          file_id,
-          user_id,
-          context,
-          answer: ai_response
-            ? `${ai_response}`
-            : "Nothing found relevant with the query in the selected document.",
-        })
-        .select();
-
-      if (error) throw error;
-
-      // UPDATING REDUX STATE
-      dispatch(actions.setSingleQuery(data[0]));
-
-      onSuccess && onSuccess();
-    }
-    onFailure && onFailure();
+    // UPDATING REDUX STATE
+    dispatch(actions.setSingleQuery(queryData));
+    dispatch(
+      actions.setTime({
+        type: "file",
+        time: total_time_taken,
+      })
+    );
+    onSuccess && onSuccess();
   } catch ({ error, message }) {
     onFailure && onFailure();
     console.error(error, message);
@@ -205,6 +171,59 @@ export const deleteQuery = (query_id, callback) => async (dispatch) => {
     notify("success", "Query deleted successfully");
     callback && callback();
     return;
+  } catch ({ error, message }) {
+    callback && callback();
+    console.error(error, message);
+    notify("error", `Oops! ${error} Error`, `${message}`);
+  }
+};
+
+// REDUX ACTION TO GET USER API KEY RECORD FROM SUPABASE
+export const getAPIKeyRecord = (userId, callback) => async (dispatch) => {
+  // TOGGLING QUERIES LOADER
+  dispatch(actions.toggleAPIKeyLoading(true));
+  try {
+    // GETTING DATA TO SUPABASE
+    const { data, error } = await supabase
+      .from("user_api_key")
+      .select("id")
+      .eq("user_id", userId);
+
+    // THROW ERROR IF ANY
+    if (error) throw error;
+
+    // UPDATING REDUX STATE
+    dispatch(actions.setAPIKey(data[0]?.id));
+
+    // TOGGLING QUERIES LOADER
+    dispatch(actions.toggleAPIKeyLoading(false));
+
+    // SUCCESS CALLBACK
+    callback && callback(true);
+  } catch ({ error, message }) {
+    onFailure && onFailure();
+    console.error(error, message);
+    notify("error", `Oops! ${error} Error`, `${message}`);
+  }
+};
+
+// REDUX ACTION TO SET USER API KEY RECORD IN SUPABASE
+export const setAPIKeyRecord = (body, callback) => async (dispatch) => {
+  try {
+    // SAVING DATA TO SUPABASE
+    const { data, error } = await supabase
+      .from("user_api_key")
+      .upsert({ user_id: body.user_id, ...body }, { onConflict: ["user_id"] })
+      .select("id");
+
+    // THROW ERROR IF ANY
+    if (error) throw error;
+
+    // UPDATING REDUX STATE
+    dispatch(actions.setAPIKey(data[0]?.id));
+
+    // SUCCESS CALLBACK
+    callback && callback(true);
   } catch ({ error, message }) {
     callback && callback();
     console.error(error, message);

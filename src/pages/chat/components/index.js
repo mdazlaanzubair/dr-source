@@ -1,3 +1,4 @@
+import APIKeyFormModal from "./api-key-form-modal";
 import FileUploadFormModal from "./file-upload-form-modal";
 import FileUploadLoader from "./file-upload-loader";
 import FilesList from "./files-list";
@@ -11,5 +12,6 @@ export {
   FileUploadLoader,
   QueriesList,
   QueryForm,
-  NavBar
+  NavBar,
+  APIKeyFormModal,
 };

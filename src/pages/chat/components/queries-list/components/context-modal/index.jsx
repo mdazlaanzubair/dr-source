@@ -19,6 +19,7 @@ const ContextModal = ({ showContext, closeHandler }) => {
   //     });
   // };
 
+
   return (
     <Modal
       title={false}
@@ -55,7 +56,7 @@ const ContextModal = ({ showContext, closeHandler }) => {
 
       <div className="w-full max-h-[40vh] overflow-y-auto no-scrollbar my-3">
         {showContext?.map((context, index) => {
-          const { page_num, page_content } = JSON.parse(context);
+          const { page_num, page_text } = JSON.parse(context);
 
           return (
             <Tooltip
@@ -72,7 +73,7 @@ const ContextModal = ({ showContext, closeHandler }) => {
                 className="text-secondary font-medium text-xs capitalize p-3 my-5 rounded-lg bg-secondary/10"
                 copyable
               >
-                {page_content?.join()}
+                {page_text}
               </Typography.Paragraph>
             </Tooltip>
           );

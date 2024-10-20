@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import appLogo from "../../../../assets/app-logo.png";
 import { UserButton } from "@clerk/clerk-react";
 

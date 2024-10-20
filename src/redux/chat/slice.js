@@ -3,9 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   files: [],
   queries: [],
+  api_key: null,
+  selectedFile: null,
+  fileEmbeddingTime: 0,
+  queryResponseTime: 0,
   selectedFile: null,
   isLoadingQueries: false,
   isLoadingFiles: false,
+  isLoadingAPIKey: false,
 };
 
 const chatSlice = createSlice({
@@ -16,16 +21,37 @@ const chatSlice = createSlice({
       state.isLoadingFiles = action.payload;
     },
 
+    toggleAPIKeyLoading: (state, action) => {
+      state.isLoadingAPIKey = action.payload;
+    },
+
+    // SETTER FOR API KEY
+    setAPIKey: (state, action) => {
+      state.api_key = action.payload;
+    },
+
+    // SETTER FOR RESPONSE TIME
+    setTime: (state, action) => {
+      if (action.payload.type == "file") {
+        state.queryResponseTime = 0;
+        state.fileEmbeddingTime = action.payload.time;
+        setTimeout(() => (state.fileEmbeddingTime = 0), 3000); // RESETTING TIMER
+      } else {
+        state.fileEmbeddingTime = 0;
+        state.queryResponseTime = action.payload.time;
+        setTimeout(() => (state.queryResponseTime = 0), 3000); // RESETTING TIMER
+      }
+    },
+
     setSingleFile: (state, action) => {
       // CHECKING IF THE FILE ALREADY EXISTS IN THE STATE
       const filteredFiles = state.files?.filter(
         ({ id: file_id }) => file_id !== action.payload.id
       );
 
-      state.files = filteredFiles?.length <= 0 && [
-        action.payload,
-        ...state.files,
-      ];
+      if (filteredFiles?.length <= 0) {
+        state.files = [action.payload, ...state.files];
+      }
     },
 
     setFiles: (state, action) => {
