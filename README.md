@@ -26,7 +26,7 @@ cd dr-source
 npm install
 ```
 
-### 4. Set up your environment variables:
+### 3. Set up your environment variables:
 
 Rename `.env.example` to `.env` and add your values for 
 ```
@@ -36,13 +36,13 @@ VITE_SUPABASE_PUBLIC_KEY=
 VITE_CLERK_PUBLISHABLE_KEY=
 ```
 
-### 5. Start the development server:
+### 4. Start the development server:
 
 ```bash
 npm run dev
 ```
 
-### 6. Scripts
+### 5. Scripts
 - Starts the development server: `npm run dev`
 
 - Builds the app for production: `npm run build` 
